@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aqua World – Aquarium Shop</title>
+<style>
+:root{--o:#0a7ea4;--n:#06293a;--a:#bdf0ff;--c:#e0faff;--pk:#d6336c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font:15px/1.5 "Avenir Next","Trebuchet MS",system-ui,sans-serif;color:var(--n);background:linear-gradient(180deg,#e0faff,#fff 40%,#bdf0ff);min-height:100vh;padding-bottom:80px}
+h1,h2,h3{margin:.3em 0;letter-spacing:-.01em}
+.g{background:rgba(255,255,255,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.85);border-radius:20px;box-shadow:0 8px 28px rgba(10,126,164,.16)}
+.btn{border:0;border-radius:14px;padding:9px 15px;font:inherit;font-weight:700;color:#fff;background:linear-gradient(135deg,#19a7d6,#0a7ea4);cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .2s}
+.btn:hover{box-shadow:0 6px 16px rgba(10,126,164,.35)}.btn:active{transform:scale(.95)}.btn:disabled{opacity:.5}.btn.l{background:rgba(255,255,255,.85);color:var(--o)}.btn.r{background:var(--pk)}.btn.s{padding:5px 10px;font-size:13px}
+.rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.6);transform:scale(0);animation:rp .6s;pointer-events:none}@keyframes rp{to{transform:scale(4);opacity:0}}
+input,select,textarea{width:100%;padding:10px;margin:4px 0;border:1px solid #9edcf0;border-radius:12px;font:inherit;background:rgba(255,255,255,.85)}
+:focus-visible{outline:3px solid #19a7d6;outline-offset:2px}
+label{font-weight:600;font-size:13px}.err{color:var(--pk);font-size:13px;min-height:18px}
+#fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+#fx i{position:absolute;bottom:-30px;border-radius:50%;background:rgba(255,255,255,.65);border:1px solid #9edcf0;animation:rise linear infinite}@keyframes rise{to{transform:translateY(-115vh) translateX(20px)}}
+#fx b{position:absolute;font-size:26px;animation:swim linear infinite;font-weight:400}@keyframes swim{from{transform:translateX(-80px)}to{transform:translateX(110vw)}}
+.wave{position:fixed;left:0;right:0;bottom:0;height:60px;z-index:0;pointer-events:none;background:repeating-radial-gradient(circle at 50% 100%,rgba(25,167,214,.18) 0 18px,transparent 18px 36px);animation:wv 6s linear infinite;background-size:72px 60px}@keyframes wv{to{background-position:72px 0}}
+.page{position:relative;z-index:1;max-width:1100px;margin:auto;padding:10px 14px}
+.hide{display:none!important}.v{display:none;animation:in .35s}.v.on{display:block}@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.rv{opacity:0;transform:translateY(16px);transition:.6s}.rv.in{opacity:1;transform:none}
+/* login */
+#login,#boot{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#06293a,#0a7ea4 60%,#bdf0ff)}
+#boot{z-index:60;color:#fff;font-size:44px;transition:opacity .5s}.lc{width:min(380px,92vw);padding:26px;text-align:center}.logo{font-size:52px;animation:fl 3s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-8px)}}
+.tick{font-size:64px;animation:pop .5s}@keyframes pop{from{transform:scale(0)}}
+/* nav */
+nav{position:sticky;top:8px;z-index:20;display:flex;align-items:center;gap:10px;padding:8px 14px;margin:8px 10px}nav a{color:var(--o);font-weight:700;text-decoration:none;cursor:pointer}
+.menu{display:flex;gap:14px;flex:1}.ic{background:none;border:0;font-size:20px;cursor:pointer;position:relative;transition:transform .2s}.ic:hover{transform:scale(1.2) rotate(-6deg)}.cnt{position:absolute;top:-6px;right:-8px;background:var(--pk);color:#fff;border-radius:10px;font-size:11px;padding:0 5px}
+#burger{display:none}#sb{margin:0 10px}
+@media(max-width:760px){#burger{display:block}.menu{position:absolute;top:110%;left:0;right:0;flex-direction:column;padding:14px;background:rgba(255,255,255,.92);border-radius:18px;max-height:0;overflow:hidden;padding-block:0;opacity:0;transition:.3s}.menu.open{max-height:320px;opacity:1;padding-block:14px}}
+/* banner */
+#ban{position:relative;overflow:hidden;min-height:190px;color:#fff}.sl{position:absolute;inset:0;opacity:0;transition:opacity .8s;display:flex;flex-direction:column;justify-content:center;padding:26px 60px;background:linear-gradient(120deg,#0a7ea4,#19a7d6) center/cover}.sl.on{opacity:1}.sl:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,41,58,.7),transparent)}.sl>*{position:relative}
+.ar{position:absolute;top:50%;transform:translateY(-50%);z-index:3}.dots{position:absolute;bottom:8px;left:0;right:0;text-align:center;z-index:3}.dots span{display:inline-block;width:9px;height:9px;margin:0 3px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer}.dots .on{background:#fff;width:22px;border-radius:6px}
+.chips{display:flex;gap:8px;overflow:auto;padding:8px 0}.chip{white-space:nowrap;padding:5px 12px;border-radius:99px;font-weight:700;font-size:13px}
+/* cats/prods */
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}.cat{padding:14px;text-align:center;border-radius:28px;cursor:pointer;font-weight:700;transition:transform .25s}.cat:hover,.cat.on{transform:translateY(-5px) scale(1.04);background:#fff}.cat .im{font-size:34px;height:48px;display:flex;align-items:center;justify-content:center}
+.im img,.pi img{max-width:100%;max-height:100%;object-fit:cover;border-radius:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}.pc{padding:10px;display:flex;flex-direction:column;gap:3px;transition:transform .25s}.pc:hover{transform:translateY(-4px)}.pi{height:95px;border-radius:14px;background:var(--a);display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden;position:relative}
+.pc select{padding:5px;font-size:13px}.old{text-decoration:line-through;opacity:.55;font-size:13px}.off{color:var(--pk);font-weight:700;font-size:13px}.pr{font-size:17px;font-weight:800}.oos{position:absolute;inset:0;background:rgba(6,41,58,.6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.row{display:flex;gap:6px;flex-wrap:wrap}.row>*{flex:1}
+.sv{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.sv>div{padding:18px}
+.card{padding:16px;margin:10px 0}h2.t{font-size:24px;margin:22px 0 10px}
+.soc a{display:inline-block;font-size:26px;margin:4px;text-decoration:none;transition:transform .2s}.soc a:hover{transform:translateY(-4px) rotate(8deg)}
+footer{margin:20px 10px;padding:20px}footer .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}footer a{color:var(--o);cursor:pointer;display:block}
+.bn{position:fixed;bottom:10px;left:10px;right:10px;z-index:30;display:flex;justify-content:space-around;padding:6px;border-radius:26px;max-width:520px;margin:auto}.bn button{background:none;border:0;font:inherit;font-size:11px;font-weight:700;color:var(--o);padding:6px 8px;border-radius:18px;cursor:pointer;position:relative}.bn button span{display:block;font-size:20px;transition:transform .3s}.bn button.on{background:rgba(25,167,214,.2)}.bn button.on span{transform:translateY(-3px) scale(1.2)}
+.ci{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #cdeffa}.ci .pi{width:56px;height:56px;font-size:28px;flex:none}.ci>div:nth-child(2){flex:1}
+.q{display:flex;align-items:center;gap:6px}.q button{width:28px;height:28px;padding:0}
+.pay{display:flex;gap:8px;flex-wrap:wrap}.pay label{flex:1;min-width:130px;padding:10px;border:2px solid #9edcf0;border-radius:14px;cursor:pointer;text-align:center}.pay input{display:none}.pay input:checked+span{color:var(--o)}.pay label:has(input:checked){border-color:var(--o);background:#fff}
+.qr{text-align:center}.qr img{max-width:210px;border-radius:14px}.note{background:#fff7d6;border-radius:12px;padding:10px;font-size:13px}
+table{width:100%;border-collapse:collapse}th,td{padding:7px;border-bottom:1px solid #cdeffa;text-align:left;font-size:13px;vertical-align:top}.tw{overflow:auto}
+/* admin */
+#adm{position:fixed;inset:0;z-index:40;background:linear-gradient(160deg,#e0faff,#fff);display:none;overflow:auto}#adm.on{display:flex}
+#side{width:220px;flex:none;padding:14px;margin:10px;height:calc(100vh - 20px);overflow:auto;position:sticky;top:10px}#side button{display:block;width:100%;text-align:left;margin:3px 0}#main{flex:1;padding:10px 14px;min-width:0}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.st div{padding:16px}.st h2{font-size:28px;margin:0;animation:pop .6s}
+@media(max-width:760px){#adm.on{flex-direction:column}#side{width:auto;height:auto;position:static;display:flex;gap:4px;overflow:auto}#side button{width:auto;white-space:nowrap}}
+#toast{position:fixed;top:14px;left:50%;transform:translate(-50%,-90px);z-index:99;padding:10px 18px;border-radius:14px;background:var(--n);color:#fff;transition:transform .35s}#toast.on{transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style></head><body>
+<div id="boot"><span class="logo">🐠</span></div><div id="fx"></div><div class="wave"></div><div id="toast"></div>
+<div id="login" class="hide"><div class="g lc"><div class="logo" id="lg">🐟</div><h2 id="ls">Aqua World</h2><p>Sign in to start shopping</p>
+<input id="ln" placeholder="Your name" autocomplete="name"><input id="lm" placeholder="Mobile number" inputmode="numeric" maxlength="10" autocomplete="tel"><div class="err" id="le"></div><button class="btn" id="lb" style="width:100%">Continue</button>
+<p style="font-size:12px;opacity:.7">Demo sign-in only: details are saved in this browser and are not verified.</p></div></div>
+<div id="app" class="hide">
+<nav class="g"><button class="ic" id="burger" aria-label="Menu">☰</button><b id="nl" style="font-size:18px;cursor:pointer" onclick="go('home')">🐟 Aqua World</b>
+<div class="menu" id="menu"><a onclick="sc('home','top')">Home</a><a onclick="sc('home','categories')">Categories</a><a onclick="sc('home','products')">Products</a><a onclick="sc('home','services')">Services</a><a onclick="sc('home','contact')">Contact</a></div>
+<button class="ic" id="sbt" aria-label="Search">🔍</button><button class="ic" onclick="go('cart')" aria-label="Cart">🛒<span class="cnt" id="cc">0</span></button><button class="ic" onclick="go('account')" aria-label="Account">👤</button></nav>
+<div id="sb" class="hide"><input id="q" placeholder="Search fish & accessories…"></div>
+<div class="page">
+<div id="v-home" class="v on"><div id="ban" class="g"></div><div class="chips" id="offers"></div>
+<h2 class="t rv" id="categories">Shop by category</h2><div class="cats" id="cats"></div>
+<h2 class="t rv" id="products">Products <button class="btn s l" id="allb" onclick="fc='';home()">Show all</button></h2><div class="grid" id="plist"></div>
+<h2 class="t rv" id="services">Our services</h2><div class="sv rv">
+<div class="g"><h3>🚚 Fast Delivery Within 2–3 Days</h3><p>Safe packaging and carefully handled products. Delivery within 2–3 days, subject to location and availability.</p></div>
+<div class="g"><h3>⚠️ Non-Returnable & Non-Refundable Products</h3><p>Live fish and aquarium items cannot be returned or refunded once delivered. This does not affect any rights you have under applicable consumer law.</p></div>
+<div class="g"><h3>💬 24/7 Customer Support</h3><p>Help with orders, product guidance and care tips. Call or WhatsApp us any time.</p></div></div>
+<h2 class="t rv" id="contact">Contact us</h2><div class="g card rv" id="ct"></div></div>
+<div id="v-cart" class="v"></div><div id="v-checkout" class="v"></div><div id="v-pay" class="v"></div><div id="v-success" class="v"></div><div id="v-orders" class="v"></div><div id="v-account" class="v"></div>
+</div>
+<footer class="g"><div class="cols" id="ft"></div><p style="text-align:center;font-size:12px" id="cp"></p><p style="text-align:center"><a style="display:inline;font-size:12px" onclick="admLogin()">Admin Login</a></p></footer>
+<div class="bn g"><button data-n="home" onclick="go('home')"><span>🏠</span>Home</button><button data-n="cat" onclick="sc('home','categories')"><span>🐠</span>Categories</button><button data-n="cart" onclick="go('cart')"><span>🛒</span>Cart</button><button data-n="orders" onclick="go('orders')"><span>📦</span>My Orders</button><button data-n="account" onclick="go('account')"><span>👤</span>Account</button></div></div>
+<div id="adm"><div id="side" class="g"></div><div id="main"></div></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'₹'+Number(n).toLocaleString('en-IN'),K='aqua_demo_db_v1',url=u=>/^https?:\/\//i.test(u)?esc(u):'#';
+const seed=()=>({shop:{name:'Aqua World',logo:'🐟',phone:'+91 90000 00000',wa:'919000000000',email:'hello@aquaworld.example',addr:'Main Road, Ooty, Tamil Nadu 643001',ig:'',fb:'',yt:''},
+cats:[['Gold Fish','🐠'],['Betta Fish','🐟'],['Guppy Fish','🐡'],['Flowerhorn Fish','🦈'],['Tetra Fish','🐠'],['Aquarium Accessories','🪸']].map((c,i)=>({id:'c'+i,name:c[0],img:c[1]})),
+prods:[['Gold Fish',0,199,149,'🐠'],['Fancy Gold Fish',0,299,239,'🐠'],['Betta Halfmoon',1,249,189,'🐟'],['Betta Plakat',1,199,149,'🐟'],['Guppy Mix',2,99,69,'🐡'],['Flowerhorn Baby',3,899,699,'🦈'],['Neon Tetra',4,60,45,'🐠'],['Air Pump',5,399,299,'🫧']].map((p,i)=>({id:'p'+i,name:p[0],cat:'c'+p[1],mrp:p[2],price:p[3],pmrp:p[2]*2,pprice:Math.round(p[3]*1.9),single:true,pair:p[1]<5,stock:i==6?0:20,avail:true,desc:'Healthy, well-fed and carefully packed.',img:p[4]})),
+banners:[{id:'b1',title:'Monsoon Fish Fest',text:'Up to 25% off on Gold Fish & Betta',img:''},{id:'b2',title:'Flowerhorn Special',text:'Premium babies from ₹699',img:''}],offers:[{id:'o1',title:'Free delivery',text:'Orders above ₹999'}],qr:{},orders:[],users:{},cart:[],user:null});
+let db;try{db=JSON.parse(localStorage.getItem(K))||seed()}catch(e){db=seed()}
+function save(){try{localStorage.setItem(K,JSON.stringify(db));return true}catch(e){toast('Browser storage is full. Use smaller images or delete some items.');return false}}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),2400)}
+const img=x=>x&&(x.startsWith('data:')||x.startsWith('http://')||x.startsWith('https://')||x.startsWith('/'))?`<img src="${esc(x)}" alt="">`:esc(x||'🐟');
+const prod=id=>db.prods.find(p=>p.id==id),cat=id=>db.cats.find(c=>c.id==id);
+const pr=(p,o)=>o=='P'?{mrp:+p.pmrp,price:+p.pprice}:{mrp:+p.mrp,price:+p.price},dc=(m,p)=>m>0?Math.round((1-p/m)*100):0;
+const uid=()=>Math.random().toString(36).slice(2,9);
+function readImg(f,max){return new Promise((res,rej)=>{if(!f||!f.type.startsWith('image/'))return rej();const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*s;c.height=i.height*s;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.75))};i.onerror=rej;i.src=r.result};r.onerror=rej;r.readAsDataURL(f)})}
+/* effects */
+(()=>{const f=$('#fx');for(let i=0;i<14;i++){const b=document.createElement('i'),s=6+Math.random()*14,d=9+Math.random()*10;b.style.cssText=`left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${d}s;animation-delay:-${Math.random()*d}s`;f.append(b)}
+['🐠','🐟','🐡','✨'].forEach((e,i)=>{const b=document.createElement('b'),d=26+i*7;b.textContent=e;b.style.cssText=`top:${18+i*18}%;animation-duration:${d}s;animation-delay:-${i*8}s;opacity:.7`;f.append(b)})})();
+document.addEventListener('click',e=>{const b=e.target.closest('.btn');if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement('span');s.className='rip';const z=Math.max(r.width,r.height);s.style.cssText=`width:${z}px;height:${z}px;left:${e.clientX-r.left-z/2}px;top:${e.clientY-r.top-z/2}px`;b.append(s);setTimeout(()=>s.remove(),600)});
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('in')),{threshold:.1});
+/* login */
+$('#lb').onclick=()=>{const n=$('#ln').value.trim(),m=$('#lm').value.trim();
+if(n.length<2)return $('#le').textContent='Enter your name (at least 2 letters).';if(!/^[6-9]\d{9}$/.test(m))return $('#le').textContent='Enter a valid 10-digit Indian mobile number.';
+db.user={name:n,mobile:m};db.users[m]=n;save();$('#lg').outerHTML='<div class="tick">✅</div>';setTimeout(enter,800)};
+function enter(){$('#login').classList.add('hide');$('#app').classList.remove('hide');brand();home();cartUI();go('home')}
+function logout(){db.user=null;save();location.reload()}
+/* branding */
+function brand(){const s=db.shop,L=s.logo&&(s.logo.startsWith('data:')||s.logo.startsWith('http://')||s.logo.startsWith('https://')||s.logo.startsWith('/'))?`<img src="${esc(s.logo)}" style="height:22px;vertical-align:middle">`:esc(s.logo);
+$('#nl').innerHTML=L+' '+esc(s.name);$('#ls').textContent=s.name;document.title=s.name;
+const soc=`<span class="soc">${s.ig?`<a href="${url(s.ig)}" target="_blank" rel="noopener" title="Instagram">📸</a>`:''}${s.fb?`<a href="${url(s.fb)}" target="_blank" rel="noopener" title="Facebook">📘</a>`:''}${s.wa?`<a href="https://wa.me/${esc(s.wa.replace(/\D/g,''))}" target="_blank" rel="noopener" title="WhatsApp">💬</a>`:''}${s.yt?`<a href="${url(s.yt)}" target="_blank" rel="noopener" title="YouTube">▶️</a>`:''}</span>`;
+const info=`<p>📞 ${esc(s.phone)}<br>💬 WhatsApp ${esc(s.wa)}<br>✉️ ${esc(s.email)}<br>📍 ${esc(s.addr)}</p>`;
+$('#ct').innerHTML=`<h3>${esc(s.name)}</h3>${info}${soc}<br><a class="btn" style="display:inline-block;text-decoration:none" href="https://wa.me/${esc(s.wa.replace(/\D/g,''))}" target="_blank" rel="noopener">Contact Us</a>`;
+$('#ft').innerHTML=`<div><h3>${L} ${esc(s.name)}</h3><p>About us: your local aquarium shop for healthy fish and quality accessories.</p></div><div><h3>Quick links</h3><a onclick="sc('home','categories')">Categories</a><a onclick="sc('home','products')">Products</a><a onclick="go('orders')">My Orders</a></div><div><h3>Contact</h3>${info}${soc}</div>`;
+$('#cp').textContent=`© ${new Date().getFullYear()} ${s.name}. All rights reserved.`}
+/* home */
+let fc='',bi=0,bt;
+function home(){brand();banners();offers();cats();plist();$$('.rv').forEach(e=>io.observe(e))}
+function offers(){$('#offers').innerHTML=db.offers.map(o=>`<span class="chip g">🏷️ ${esc(o.title)}: ${esc(o.text)}</span>`).join('')}
+function banners(){const B=db.banners;$('#ban').innerHTML=B.length?B.map((b,i)=>`<div class="sl ${i==bi%B.length?'on':''}" ${b.img?`style="background-image:url(${b.img})"`:''}><h2>${esc(b.title)}</h2><p>${esc(b.text)}</p><div><button class="btn l" onclick="sc('home','products')">Shop Now</button></div></div>`).join('')+`<button class="btn l ar" style="left:8px" onclick="bn(-1)" aria-label="Previous">‹</button><button class="btn l ar" style="right:8px" onclick="bn(1)" aria-label="Next">›</button><div class="dots">${B.map((_,i)=>`<span class="${i==bi%B.length?'on':''}" onclick="bn(0,${i})"></span>`).join('')}</div>`:'<div class="sl on"><h2>Welcome</h2></div>';
+clearInterval(bt);bt=setInterval(()=>bn(1,null,1),5000)}
+function bn(d,i,auto){const n=db.banners.length;if(!n)return;if($('#ban').matches(':hover')&&auto)return;bi=i!=null?i:(bi+d+n)%n;banners()}
+$('#ban').addEventListener('touchstart',()=>clearInterval(bt),{passive:true});
+function cats(){$('#cats').innerHTML=db.cats.map(c=>`<div class="g cat ${fc==c.id?'on':''}" onclick="fc='${c.id}';plist();sc('home','products')"><div class="im">${img(c.img)}</div>${esc(c.name)}</div>`).join('')}
+const sel={};
+function priceHtml(p,o){const x=pr(p,o);return `<span class="old">${inr(x.mrp)}</span> <span class="pr">${inr(x.price)}</span> <span class="off">${dc(x.mrp,x.price)}% off</span>`}
+function plist(){const q=$('#q').value.trim().toLowerCase();$('#allb').classList.toggle('hide',!fc);
+const L=db.prods.filter(p=>(!fc||p.cat==fc)&&(!q||p.name.toLowerCase().includes(q)));
+$('#plist').innerHTML=L.map(p=>{const out=!p.avail||p.stock<=0,o=sel[p.id]=sel[p.id]||(p.single?'S':'P');
+return `<div class="g pc"><div class="pi">${img(p.img)}${out?'<div class="oos">Out of Stock</div>':''}</div><b>${esc(p.name)}</b><small>${esc((cat(p.cat)||{}).name)} · ${out?'Unavailable':p.stock+' in stock'}</small>
+<select aria-label="Option" onchange="sel['${p.id}']=this.value;$('#pp${p.id}').innerHTML=priceHtml(prod('${p.id}'),this.value)">${p.single?`<option value="S" ${o=='S'?'selected':''}>Single Fish</option>`:''}${p.pair?`<option value="P" ${o=='P'?'selected':''}>Pair Fish</option>`:''}</select><div id="pp${p.id}">${priceHtml(p,o)}</div>
+<div class="row"><button class="btn s" ${out?'disabled':''} onclick="addCart('${p.id}')">Add to Cart</button><button class="btn s l" ${out?'disabled':''} onclick="buyNow('${p.id}')">Buy Now</button></div></div>`}).join('')||'<p>No products found. Try another search or category.</p>'}
+$('#q').oninput=()=>{go('home');plist()};$('#sbt').onclick=()=>{$('#sb').classList.toggle('hide');$('#q').focus()};$('#burger').onclick=()=>$('#menu').classList.toggle('open');
+/* nav */
+let cur='home';
+function go(v){cur=v;$$('.v').forEach(e=>e.classList.toggle('on',e.id=='v-'+v));$('#menu').classList.remove('open');
+({cart:cartView,orders:ordersView,account:accountView,checkout:checkoutView,pay:payView})[v]?.();
+$$('.bn button').forEach(b=>b.classList.toggle('on',b.dataset.n==v));scrollTo({top:0,behavior:'smooth'})}
+function sc(v,id){go(v);if(id!='top')setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth'}),60)}
+/* cart */
+let buy=null;
+const items=a=>a.map(i=>{const p=prod(i.pid);if(!p)return null;const x=pr(p,i.opt);return{...i,p,mrp:x.mrp,price:x.price}}).filter(Boolean);
+const sums=L=>{const s=L.reduce((a,i)=>a+i.mrp*i.qty,0),t=L.reduce((a,i)=>a+i.price*i.qty,0);return{s,d:s-t,t}};
+function cartUI(){$('#cc').textContent=db.cart.reduce((a,i)=>a+i.qty,0)}
+function addCart(pid,silent){const p=prod(pid),o=sel[pid]||'S',e=db.cart.find(i=>i.pid==pid&&i.opt==o);if(e){if(e.qty>=p.stock)return toast('Only '+p.stock+' available');e.qty++}else db.cart.push({pid,opt:o,qty:1});save();cartUI();if(!silent)toast('Added to cart ✔')}
+function buyNow(pid){const o=sel[pid]||'S';buy=[{pid,opt:o,qty:1}];go('checkout')}
+function qty(k,d){const i=db.cart[k],p=prod(i.pid);if(d>0&&i.qty>=p.stock)return toast('Only '+p.stock+' available');i.qty+=d;if(i.qty<=0)db.cart.splice(k,1);save();cartUI();cartView()}
+function cartView(){buy=null;const L=items(db.cart),s=sums(L);
+$('#v-cart').innerHTML=`<h2>Your cart</h2><div class="g card">${L.length?L.map((i,k)=>`<div class="ci"><div class="pi">${img(i.p.img)}</div><div><b>${esc(i.p.name)}</b><br><small>${i.opt=='P'?'Pair':'Single'} · ${inr(i.price)}</small></div><div class="q"><button class="btn s" onclick="qty(${k},-1)">−</button>${i.qty}<button class="btn s" onclick="qty(${k},1)">+</button></div><button class="btn s r" onclick="qty(${k},-99)">✕</button></div>`).join('')+`<p>Subtotal ${inr(s.s)}<br>Discount −${inr(s.d)}<br><b style="font-size:18px">Total ${inr(s.t)}</b></p><button class="btn" onclick="go('checkout')">Checkout</button>`:'<p>Your cart is empty. Pick a few fish to get started.</p><button class="btn" onclick="go(\'home\')">Browse products</button>'}</div>`}
+/* checkout */
+let draft=null,placing=false;
+function checkoutView(){const L=items(buy||db.cart);if(!L.length){toast('Your cart is empty');return go('cart')}const s=sums(L),u=db.user||{},d=draft||{};
+$('#v-checkout').innerHTML=`<h2>Delivery details</h2><div class="g card"><label>Name</label><input id="cn" value="${esc(d.name||u.name)}"><label>Mobile number</label><input id="cm" maxlength="10" inputmode="numeric" value="${esc(d.mobile||u.mobile)}"><label>Full address</label><textarea id="ca" rows="2">${esc(d.addr)}</textarea><div class="row"><div><label>City</label><input id="cy" value="${esc(d.city)}"></div><div><label>State</label><input id="cs" value="${esc(d.state)}"></div><div><label>PIN code</label><input id="cpn" maxlength="6" inputmode="numeric" value="${esc(d.pin)}"></div></div><div class="err" id="ce"></div></div>
+<div class="g card"><h3>Order summary</h3>${L.map(i=>`<div>${esc(i.p.name)} (${i.opt=='P'?'Pair':'Single'}) × ${i.qty} — ${inr(i.price*i.qty)}</div>`).join('')}<p>Discount −${inr(s.d)} · <b>Total ${inr(s.t)}</b></p><div class="note">All products are non-returnable and non-refundable. This does not limit your rights under applicable consumer law. Delivery in 2–3 days, subject to location and availability.</div></div>
+<div class="row"><button class="btn l" onclick="go(buy?'home':'cart')">Back</button><button class="btn" onclick="toPay()">Continue Shipping</button></div>`}
+function toPay(){const d={name:$('#cn').value.trim(),mobile:$('#cm').value.trim(),addr:$('#ca').value.trim(),city:$('#cy').value.trim(),state:$('#cs').value.trim(),pin:$('#cpn').value.trim()};let e='';
+if(d.name.length<2)e='Enter your name.';else if(!/^[6-9]\d{9}$/.test(d.mobile))e='Enter a valid 10-digit mobile number.';else if(d.addr.length<10)e='Enter your full address (at least 10 characters).';else if(d.city.length<2)e='Enter your city.';else if(d.state.length<2)e='Enter your state.';else if(!/^\d{6}$/.test(d.pin))e='Enter a 6-digit PIN code.';
+if(e)return $('#ce').textContent=e;draft=d;go('pay')}
+/* payment */
+let pm='COD';
+function payView(){if(!draft)return go('checkout');const L=items(buy||db.cart),s=sums(L);
+$('#v-pay').innerHTML=`<h2>Payment</h2><div class="g card"><div class="pay">${[['COD','💵 Cash on Delivery'],['PhonePe','🟣 PhonePe'],['GPay','🔵 Google Pay'],['Paytm','🔷 Paytm']].map(m=>`<label><input type="radio" name="pm" value="${m[0]}" ${pm==m[0]?'checked':''} onchange="pm=this.value;payBox()"><span>${m[1]}</span></label>`).join('')}</div><div id="pbox"></div></div><p><b>Amount: ${inr(s.t)}</b></p><div class="row"><button class="btn l" onclick="go('checkout')">Back</button><button class="btn" id="pbtn" onclick="placeOrder()">Confirm Order</button></div><div class="err" id="pe"></div>`;payBox()}
+function payBox(){const b=$('#pbox');if(pm=='COD')return b.innerHTML='<p>✅ Cash on Delivery selected. Pay when your order arrives.</p>';
+const q=db.qr[pm];b.innerHTML=(q?`<div class="qr"><p>Scan this ${pm} QR and pay the exact amount.</p><img src="${q}" alt="${pm} QR"></div>`:`<div class="note">The shop has not set up a ${pm} QR yet. Pick another method or contact the shop.</div>`)+`<label>Payment reference / UTR</label><input id="utr" placeholder="12-digit UTR or reference" maxlength="30"><div class="note">Demo only: payments are not verified here. Online orders stay <b>Payment Pending</b> until the shop confirms them.</div>`}
+function placeOrder(){if(placing)return;const L=items(buy||db.cart);let utr='';
+if(pm!='COD'){if(!db.qr[pm])return $('#pe').textContent='This QR is not available. Choose another method.';utr=$('#utr').value.trim();if(!/^[A-Za-z0-9]{6,30}$/.test(utr))return $('#pe').textContent='Enter your payment reference (6–30 letters or digits).'}
+for(const i of L)if(!i.p.avail||i.p.stock<i.qty)return $('#pe').textContent=`${i.p.name} is out of stock. Update your cart.`;
+placing=true;$('#pbtn').disabled=true;const s=sums(L);
+const o={id:'AQ'+Date.now().toString(36).toUpperCase(),...draft,items:L.map(i=>({name:i.p.name,opt:i.opt,qty:i.qty,mrp:i.mrp,price:i.price})),sub:s.s,disc:s.d,total:s.t,method:pm,status:'New Order',pay:pm=='COD'?'Pay on Delivery':'Payment Pending (unverified)',utr,date:new Date().toISOString()};
+L.forEach(i=>i.p.stock-=i.qty);db.orders.unshift(o);db.users[o.mobile]=o.name;if(buy)buy=null;else db.cart=[];
+if(!save()){db.orders.shift();L.forEach(i=>i.p.stock+=i.qty);placing=false;return $('#pbtn').disabled=false}
+cartUI();plist();draft=null;placing=false;success(o)}
+function success(o){go('success');$('#v-success').innerHTML=`<div class="g card" style="text-align:center"><div class="tick">✅</div><h2>Order successful!</h2><p>Order ID <b>${o.id}</b></p></div>${orderCard(o)}<div class="row"><button class="btn l" onclick="go('home')">Continue Shopping</button><button class="btn" onclick="go('orders')">View Order Details</button></div>`}
+const orderCard=o=>`<div class="g card"><b>${o.id}</b> · ${new Date(o.date).toLocaleString()}<br>${esc(o.name)} · ${esc(o.mobile)}<br>${esc(o.addr)}, ${esc(o.city)}, ${esc(o.state)} ${esc(o.pin)}<hr>${o.items.map(i=>`${esc(i.name)} (${i.opt=='P'?'Pair':'Single'}) × ${i.qty} — <span class="old">${inr(i.mrp)}</span> ${inr(i.price)}`).join('<br>')}<hr>Total discount −${inr(o.disc)}<br><b>Final amount ${inr(o.total)}</b><br>Payment: ${o.method} · ${o.pay}${o.utr?' · Ref '+esc(o.utr):''}<br>Order status: <b>${o.status}</b></div>`;
+function ordersView(){const m=db.user&&db.user.mobile,L=db.orders.filter(o=>o.mobile==m);$('#v-orders').innerHTML='<h2>My orders</h2>'+(L.map(orderCard).join('')||'<div class="g card">No orders yet. Your orders will appear here.</div>')}
+function accountView(){const u=db.user||{};$('#v-account').innerHTML=`<h2>My account</h2><div class="g card"><p>👤 <b>${esc(u.name)}</b><br>📱 ${esc(u.mobile)}</p><button class="btn l" onclick="go('orders')">My orders</button> <button class="btn r" onclick="logout()">Logout</button></div>`}
+/* admin */
+const ST=['New Order','Confirmed','Processing','Shipped','Delivered','Cancelled'];let at='dash',ep=null,oq='',of='';
+function admLogin(){const u=prompt('Admin ID (demo)');if(u===null)return;const p=prompt('Password (demo)');if(u==='dine'&&p==='0309'){$('#adm').classList.add('on');adm('dash')}else toast('Wrong admin ID or password.')}
+function adm(t){at=t;const T=[['dash','📊 Dashboard'],['prods','🐟 Manage Products'],['addp','➕ Add New Product'],['cats','🗂 Manage Categories'],['ords','📦 Manage Orders'],['cus','👥 Customer Details'],['ban','🖼 Banners'],['off','🏷 Offers'],['qr','🔳 Payment QR'],['set','⚙️ Website Settings'],['con','☎️ Contact Settings'],['soc','🌐 Social Media'],['reset','♻️ Reset Demo Data']];
+$('#side').innerHTML=T.map(x=>`<button class="btn s ${x[0]==t?'':'l'}" onclick="${x[0]=='addp'?'ep=null;':''}adm('${x[0]}')">${x[1]}</button>`).join('')+`<button class="btn s r" onclick="$('#adm').classList.remove('on');home()">Logout</button>`;
+const M=$('#main'),O=db.orders;
+if(t=='dash'){const rev=O.filter(o=>o.status!='Cancelled').reduce((a,o)=>a+o.total,0);const S=[['Total Products',db.prods.length],['Total Orders',O.length],['Total Customers',Object.keys(db.users).length],['Total Revenue',inr(rev)],['Pending Orders',O.filter(o=>!['Delivered','Cancelled'].includes(o.status)).length],['Completed Orders',O.filter(o=>o.status=='Delivered').length],['Out of Stock',db.prods.filter(p=>!p.avail||p.stock<=0).length]];M.innerHTML='<h2>Dashboard</h2><div class="st">'+S.map(s=>`<div class="g">${s[0]}<h2>${s[1]}</h2></div>`).join('')+'</div>'}
+if(t=='prods')M.innerHTML=`<h2>Manage products</h2><div class="g card tw"><table><tr><th>Product</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr>${db.prods.map(p=>`<tr><td>${esc(p.name)}</td><td>${inr(p.price)} / ${inr(p.mrp)}</td><td>${p.stock}</td><td>${p.avail?'Available':'Out of Stock'}</td><td><button class="btn s" onclick="ep='${p.id}';adm('addp')">Edit</button> <button class="btn s r" onclick="delP('${p.id}')">Delete</button></td></tr>`).join('')}</table></div>`;
+if(t=='addp'){const p=ep?prod(ep):{name:'',cat:db.cats[0]?.id,mrp:'',price:'',pmrp:'',pprice:'',single:true,pair:true,stock:10,avail:true,desc:'',img:''};
+M.innerHTML=`<h2>${ep?'Edit':'Add new'} product</h2><div class="g card"><label>Name</label><input id="fn" value="${esc(p.name)}"><label>Category</label><select id="fcat">${db.cats.map(c=>`<option value="${c.id}" ${c.id==p.cat?'selected':''}>${esc(c.name)}</option>`).join('')}</select><div class="row"><div><label>Original price (single)</label><input id="fm" type="number" min="1" value="${p.mrp}"></div><div><label>Offer price (single)</label><input id="fp" type="number" min="1" value="${p.price}"></div></div><div class="row"><div><label>Original price (pair)</label><input id="fpm" type="number" min="1" value="${p.pmrp}"></div><div><label>Offer price (pair)</label><input id="fpp" type="number" min="1" value="${p.pprice}"></div></div><label><input type="checkbox" id="fs" style="width:auto" ${p.single?'checked':''}> Single option</label> <label><input type="checkbox" id="fpr" style="width:auto" ${p.pair?'checked':''}> Pair option</label><label>Stock quantity</label><input id="fst" type="number" min="0" value="${p.stock}"><label><input type="checkbox" id="fa" style="width:auto" ${p.avail?'checked':''}> Available</label><label>Description</label><textarea id="fd">${esc(p.desc)}</textarea><label>Image</label><input type="file" id="fi" accept="image/*"><div class="pi" id="fprev" style="width:90px;margin:6px 0">${img(p.img)}</div><div class="err" id="fe"></div><button class="btn" onclick="saveP()">${ep?'Update product':'Save product'}</button></div>`;
+$('#fi').onchange=async e=>{try{const d=await readImg(e.target.files[0],360);$('#fprev').innerHTML=`<img src="${d}">`;$('#fprev').dataset.d=d}catch(x){$('#fe').textContent='Choose a valid image file.'}}}
+if(t=='cats')M.innerHTML=`<h2>Categories</h2><div class="g card"><div class="row"><input id="cname" placeholder="Category name"><input id="cimg" placeholder="Emoji (e.g. 🐠) or upload below"></div><input type="file" id="cfile" accept="image/*"><button class="btn" onclick="addCat()">Add category</button></div><div class="g card">${db.cats.map(c=>`<div class="ci"><div class="pi">${img(c.img)}</div><div>${esc(c.name)}</div><button class="btn s" onclick="ren('c','${c.id}')">Rename</button><button class="btn s r" onclick="delC('${c.id}')">Delete</button></div>`).join('')}</div>`;
+if(t=='ords'){const L=O.filter(o=>(!of||o.status==of)&&(!oq||(o.id+o.name+o.mobile).toLowerCase().includes(oq)));M.innerHTML=`<h2>Orders</h2><div class="row"><input id="oq" placeholder="Search ID, name, mobile" value="${esc(oq)}" oninput="oq=this.value.toLowerCase();adm('ords');$('#oq').focus()"><select onchange="of=this.value;adm('ords')"><option value="">All statuses</option>${ST.map(s=>`<option ${s==of?'selected':''}>${s}</option>`).join('')}</select></div>`+(L.map(o=>`<div class="g card">${orderCard(o).replace(/^<div class="g card">/,'<div>')}<select onchange="setSt('${o.id}',this.value)">${ST.map(s=>`<option ${s==o.status?'selected':''}>${s}</option>`).join('')}</select> ${o.method!='COD'&&o.pay.startsWith('Payment Pending')?`<button class="btn s" onclick="paid('${o.id}')">Mark payment received</button>`:''}</div>`).join('')||'<div class="g card">No orders found.</div>')}
+if(t=='cus'){const C={};O.forEach(o=>{const c=C[o.mobile]=C[o.mobile]||{...o,n:0,amt:0};c.n++;c.amt+=o.status=='Cancelled'?0:o.total});M.innerHTML=`<h2>Customers</h2><div class="g card tw"><table><tr><th>Name</th><th>Mobile</th><th>Address</th><th>City</th><th>PIN</th><th>Orders</th><th>Purchases</th></tr>${Object.values(C).map(c=>`<tr><td>${esc(c.name)}</td><td>${esc(c.mobile)}</td><td>${esc(c.addr)}</td><td>${esc(c.city)}</td><td>${esc(c.pin)}</td><td>${c.n}</td><td>${inr(c.amt)}</td></tr>`).join('')||'<tr><td colspan=7>No customers have ordered yet.</td></tr>'}</table></div>`}
+if(t=='ban')M.innerHTML=`<h2>Banners</h2><div class="g card"><input id="bt" placeholder="Offer title"><input id="bx" placeholder="Description / discount info"><input type="file" id="bf" accept="image/*"><button class="btn" onclick="addBan()">Add banner</button></div>`+db.banners.map((b,i)=>`<div class="g card"><b>${esc(b.title)}</b> — ${esc(b.text)} ${b.img?'🖼':''}<div class="row" style="margin-top:6px"><button class="btn s" onclick="mv(${i},-1)">↑</button><button class="btn s" onclick="mv(${i},1)">↓</button><button class="btn s" onclick="ren('b','${b.id}')">Edit title</button><button class="btn s r" onclick="db.banners.splice(${i},1);save();adm('ban')">Delete</button></div></div>`).join('');
+if(t=='off')M.innerHTML=`<h2>Offers</h2><div class="g card"><input id="ot" placeholder="Offer title"><input id="ox" placeholder="Details / discount"><button class="btn" onclick="if(!$('#ot').value.trim())return toast('Enter an offer title');db.offers.push({id:uid(),title:$('#ot').value.trim(),text:$('#ox').value.trim()});save();adm('off')">Add offer</button></div>`+db.offers.map((o,i)=>`<div class="g card">${esc(o.title)} — ${esc(o.text)} <button class="btn s r" onclick="db.offers.splice(${i},1);save();adm('off')">Delete</button></div>`).join('');
+if(t=='qr')M.innerHTML='<h2>Payment QR</h2>'+['PhonePe','GPay','Paytm'].map(m=>`<div class="g card"><b>${m}</b><div class="qr">${db.qr[m]?`<img src="${db.qr[m]}" alt="">`:'<p>No QR uploaded.</p>'}</div><input type="file" accept="image/*" onchange="upQR('${m}',this)">${db.qr[m]?`<button class="btn s r" onclick="delete db.qr['${m}'];save();adm('qr')">Delete QR</button>`:''}</div>`).join('');
+if(t=='set')M.innerHTML=`<h2>Website settings</h2><div class="g card"><label>Shop name</label><input id="s1" value="${esc(db.shop.name)}"><label>Logo (emoji or upload)</label><input id="s2" value="${db.shop.logo.startsWith('data:')?'':esc(db.shop.logo)}"><input type="file" id="s2f" accept="image/*"><button class="btn" onclick="setS(['name','logo'],['s1','s2'])">Save</button></div>`;
+if(t=='con')M.innerHTML=`<h2>Contact settings</h2><div class="g card">${[['phone','Phone'],['wa','WhatsApp number (with country code)'],['email','Email'],['addr','Address']].map(f=>`<label>${f[1]}</label><input id="k_${f[0]}" value="${esc(db.shop[f[0]])}">`).join('')}<button class="btn" onclick="setS(['phone','wa','email','addr'],['k_phone','k_wa','k_email','k_addr'])">Save</button></div>`;
+if(t=='soc')M.innerHTML=`<h2>Social media</h2><div class="g card">${[['ig','Instagram URL'],['fb','Facebook URL'],['yt','YouTube URL']].map(f=>`<label>${f[1]}</label><input id="k_${f[0]}" placeholder="https://" value="${esc(db.shop[f[0]])}">`).join('')}<button class="btn" onclick="setS(['ig','fb','yt'],['k_ig','k_fb','k_yt'],1)">Save</button></div>`;
+if(t=='reset')M.innerHTML=`<h2>Reset demo data</h2><div class="g card"><p>This erases all products, orders, QR images and settings in this browser and restores the sample shop.</p><button class="btn r" onclick="if(confirm('Reset everything?')){db=seed();save();toast('Demo data reset');adm('dash')}">Reset demo data</button></div>`}
+async function saveP(){const g=i=>$('#'+i),n=g('fn').value.trim(),m=+g('fm').value,p=+g('fp').value,pm2=+g('fpm').value||m*2,pp=+g('fpp').value||p*2,s=g('fs').checked,pr2=g('fpr').checked;let e='';
+if(n.length<2)e='Enter a product name.';else if(!(m>0&&p>0))e='Enter the original and offer price.';else if(p>m)e='Offer price cannot be higher than the original price.';else if(pp>pm2)e='Pair offer price cannot be higher than the pair original price.';else if(!s&&!pr2)e='Enable Single or Pair.';
+if(e)return g('fe').textContent=e;const old=ep?prod(ep):null,d={id:ep||uid(),name:n,cat:g('fcat').value,mrp:m,price:p,pmrp:pm2,pprice:pp,single:s,pair:pr2,stock:Math.max(0,+g('fst').value|0),avail:g('fa').checked,desc:g('fd').value.trim(),img:g('fprev').dataset.d||(old?old.img:'🐟')};
+if(old)Object.assign(old,d);else db.prods.unshift(d);if(save()){toast(ep?'Product updated':'Product added');ep=null;plist();adm('prods')}}
+function delP(id){if(!confirm('Delete this product?'))return;db.prods=db.prods.filter(p=>p.id!=id);db.cart=db.cart.filter(i=>i.pid!=id);save();cartUI();plist();adm('prods')}
+async function addCat(){const n=$('#cname').value.trim();if(!n)return toast('Enter a category name');let im=$('#cimg').value.trim()||'🐟';try{if($('#cfile').files[0])im=await readImg($('#cfile').files[0],120)}catch(e){return toast('Choose a valid image')}db.cats.push({id:uid(),name:n,img:im});if(save()){cats();adm('cats')}}
+function delC(id){if(db.prods.some(p=>p.cat==id))return toast('Move or delete this category’s products first');db.cats=db.cats.filter(c=>c.id!=id);save();cats();adm('cats')}
+function ren(k,id){const x=(k=='c'?db.cats:db.banners).find(i=>i.id==id),v=prompt('New name',x.name||x.title);if(!v||!v.trim())return;if(k=='c')x.name=v.trim();else x.title=v.trim();save();home();adm(at)}
+async function addBan(){const t=$('#bt').value.trim();if(!t)return toast('Enter an offer title');let im='';try{if($('#bf').files[0])im=await readImg($('#bf').files[0],900)}catch(e){return toast('Choose a valid image')}db.banners.push({id:uid(),title:t,text:$('#bx').value.trim(),img:im});if(save()){banners();adm('ban')}}
+function mv(i,d){const j=i+d,B=db.banners;if(j<0||j>=B.length)return;[B[i],B[j]]=[B[j],B[i]];save();banners();adm('ban')}
+async function upQR(m,el){try{db.qr[m]=await readImg(el.files[0],420);if(save())adm('qr')}catch(e){toast('Choose a valid QR image')}}
+function setSt(id,s){const o=db.orders.find(o=>o.id==id);if(s=='Cancelled'&&o.status!='Cancelled')o.items.forEach(i=>{const p=db.prods.find(p=>p.name==i.name);if(p)p.stock+=i.qty});o.status=s;save();plist();adm('ords')}
+function paid(id){const o=db.orders.find(o=>o.id==id);o.pay='Paid (confirmed by shop)';save();adm('ords')}
+async function setS(keys,ids,soc){for(const[i,k]of keys.entries()){const v=$('#'+ids[i]).value.trim();if(soc&&v&&!/^https?:\/\//i.test(v))return toast('Links must start with https://');if(k=='logo'){const f=$('#s2f').files[0];if(f){try{db.shop.logo=await readImg(f,80)}catch(e){return toast('Choose a valid logo image')}continue}if(!v)continue}db.shop[k]=v}if(save()){brand();toast('Saved')}}
+/* start */
+setTimeout(()=>{$('#boot').style.opacity=0;setTimeout(()=>$('#boot').remove(),500);brand();if(db.user)enter();else $('#login').classList.remove('hide')},700);
+</script>
+<script>
+/* Aqua World API integration layer: all shop data is loaded from and saved to MongoDB. */
+(() => {
+  const API = '/api';
+  let token = localStorage.getItem('aqua_token') || '';
+  let me = null, baseline = null, queue = Promise.resolve(), remoteOrders = [];
+  const req = async (path, options={}) => {
+    const headers = { ...(options.body && !(options.body instanceof FormData) ? {'Content-Type':'application/json'} : {}), ...(token ? {Authorization:`Bearer ${token}`} : {}), ...(options.headers||{}) };
+    const response = await fetch(API+path, {...options, headers});
+    const data = response.status===204 ? null : await response.json().catch(()=>({}));
+    if (!response.ok) throw new Error(data.message || `Request failed (${response.status})`);
+    return data;
+  };
+  const clone = x => JSON.parse(JSON.stringify(x));
+  const id = x => String(x?._id || x?.id || '');
+  const clean = x => x || '';
+  const mapCategory = x => ({id:id(x),name:x.name,img:x.image||'🐟'});
+  const mapProduct = x => ({id:id(x),name:x.name,cat:id(x.category),mrp:x.mrp,price:x.price,pmrp:x.pairMrp||x.mrp*2,pprice:x.pairPrice||x.price*2,single:x.singleEnabled!==false,pair:!!x.pairEnabled,stock:x.stock,avail:x.available!==false,desc:x.description||'',img:x.image||'🐠'});
+  const mapOrder = x => ({id:x.orderNumber||id(x),_id:id(x),name:x.customer?.name||'',mobile:x.customer?.mobile||'',addr:x.customer?.address||'',city:x.customer?.city||'',state:x.customer?.state||'',pin:x.customer?.pin||'',items:(x.items||[]).map(i=>({name:i.name,opt:i.option==='pair'?'P':'S',qty:i.quantity,mrp:i.unitPrice,price:i.unitPrice})),sub:x.subtotal,disc:0,total:x.total,method:x.paymentMethod==='COD'?'COD':'UPI',pay:x.paymentStatus==='confirmed'?'Paid (confirmed by shop)':x.paymentStatus==='pending'?'Pay on Delivery':'Payment Pending (unverified)',utr:x.utr||'',status:x.status==='Placed'?'New Order':x.status==='Packed'?'Processing':x.status,date:x.createdAt});
+  const setBaseline = () => baseline={cats:clone(db.cats),prods:clone(db.prods),banners:clone(db.banners),offers:clone(db.offers),shop:clone(db.shop),qr:clone(db.qr)};
+  const diffSave = async () => {
+    if (!me || me.role!=='admin') return;
+    const old=baseline||{cats:[],prods:[],banners:[],offers:[],shop:{},qr:{}};
+    const uploadImage = async value => {
+      if (typeof value !== 'string' || !value.startsWith('data:image/')) return value;
+      const blob = await (await fetch(value)).blob();
+      const form = new FormData(); form.append('image', blob, 'shop-image.jpg');
+      const result = await req('/uploads', {method:'POST', body:form});
+      return result.url;
+    };
+    const sync = async (kind, before, after, toBody) => {
+      const base=new Map(before.map(x=>[x.id,x]));
+      for (const item of after) {
+        const body=toBody(item);
+        if (body.image) body.image=await uploadImage(body.image);
+        if (!item.id || !base.has(item.id)) {
+          const created=await req(`/${kind}`,{method:'POST',body:JSON.stringify(body)});
+          item.id=id(created);
+        } else if (JSON.stringify(base.get(item.id))!==JSON.stringify(item)) {
+          await req(`/${kind}/${item.id}`,{method:'PATCH',body:JSON.stringify(body)});
+        }
+      }
+      const now=new Set(after.map(x=>x.id));
+      for (const item of before) if(item.id && !now.has(item.id)) await req(`/${kind}/${item.id}`,{method:'DELETE'});
+    };
+    await sync('categories',old.cats,db.cats,x=>({name:x.name,image:x.img,active:true}));
+    await sync('products',old.prods,db.prods,x=>({name:x.name,category:x.cat,description:x.desc,image:x.img,mrp:+x.mrp,price:+x.price,pairMrp:+x.pmrp,pairPrice:+x.pprice,singleEnabled:!!x.single,pairEnabled:!!x.pair,stock:+x.stock,available:!!x.avail}));
+    await sync('banners',old.banners,db.banners,x=>({title:x.title,text:x.text,image:x.img||'',active:true,sortOrder:db.banners.indexOf(x)}));
+    await sync('offers',old.offers,db.offers,x=>({title:x.title,text:x.text,active:true}));
+    if(JSON.stringify(old.shop)!==JSON.stringify(db.shop)) {
+      const shop=clone(db.shop); if(shop.logo) shop.logo=await uploadImage(shop.logo);
+      await req('/settings/shop',{method:'PUT',body:JSON.stringify({value:shop})});
+    }
+    if(JSON.stringify(old.qr)!==JSON.stringify(db.qr)) {
+      const qr={}; for(const [key,value] of Object.entries(db.qr)) qr[key]=await uploadImage(value);
+      await req('/settings/paymentQr',{method:'PUT',body:JSON.stringify({value:qr})});
+    }
+    setBaseline();
+  };
+  save = () => {
+    queue=queue.then(diffSave).catch(e=>toast('Save failed: '+e.message));
+    return true;
+  };
+  const loadStore = async () => {
+    const [cats,prods,banners,offers,settings]=await Promise.all([
+      req('/categories'),req('/products'),req('/banners'),req('/offers'),req('/settings')
+    ]);
+    db.cats=cats.map(mapCategory); db.prods=prods.map(mapProduct);
+    db.banners=banners.map(x=>({id:id(x),title:x.title,text:x.text,img:x.image||''}));
+    db.offers=offers.map(x=>({id:id(x),title:x.title,text:x.text}));
+    db.shop=settings.shop||db.shop; db.qr=settings.paymentQr||{};
+    if(me){
+      const cart=await req('/cart').catch(()=>({items:[]}));
+      if(me.role==='admin'){remoteOrders=await req('/orders/admin/all').catch(()=>[]);db.orders=remoteOrders.map(mapOrder);}
+      db.cart=(cart.items||[]).filter(x=>x.product).map(x=>({pid:id(x.product),opt:x.option==='pair'?'P':'S',qty:x.quantity}));
+    } else db.cart=[];
+    setBaseline(); home(); cartUI();
+  };
+  const syncCart = () => {
+    if(!me)return;
+    req('/cart',{method:'PUT',body:JSON.stringify({items:db.cart.map(x=>({product:x.pid,option:x.opt==='P'?'pair':'single',quantity:x.qty}))})})
+      .catch(e=>toast('Cart sync failed: '+e.message));
+  };
+  const authenticate = async (register) => {
+    const name=$('#ln').value.trim(), mobile=$('#lm').value.trim(), password=$('#lp').value;
+    if(register && name.length<2)return $('#le').textContent='பெயரை உள்ளிடவும்.';
+    if(!/^[6-9]\d{9}$/.test(mobile))return $('#le').textContent='சரியான 10 இலக்க mobile number உள்ளிடவும்.';
+    if(password.length<8)return $('#le').textContent='Password குறைந்தது 8 எழுத்துகள் இருக்க வேண்டும்.';
+    try{
+      const data=await req('/auth/'+(register?'register':'login'),{method:'POST',body:JSON.stringify(register?{name,mobile,password}:{identifier:mobile,password})});
+      token=data.token; me=data.user; localStorage.setItem('aqua_token',token); db.user={name:me.name,mobile:me.mobile};
+      await loadStore(); enter();
+    }catch(e){$('#le').textContent=e.message}
+  };
+  const installLogin = () => {
+    const panel=$('#login .lc');
+    $('#ln').placeholder='Your name (signup only)';
+    $('#lm').placeholder='10-digit mobile number';
+    const pw=document.createElement('input'); pw.id='lp';pw.type='password';pw.placeholder='Password (minimum 8 characters)';pw.autocomplete='current-password';
+    $('#lm').after(pw);
+    const toggle=document.createElement('button');toggle.className='btn l';toggle.style.width='100%';toggle.style.marginTop='8px';toggle.textContent='Create a new account';
+    let signup=false; toggle.onclick=()=>{signup=!signup;$('#ln').classList.toggle('hide',!signup);pw.autocomplete=signup?'new-password':'current-password';$('#lb').textContent=signup?'Create Account':'Sign In';toggle.textContent=signup?'Already have an account? Sign in':'Create a new account';};
+    $('#lb').textContent='Sign In';$('#lb').onclick=()=>authenticate(signup);panel.insertBefore(toggle,$('#lb'));
+    panel.querySelector('p[style]').textContent='Password login. No OTP is used.';
+  };
+  enter = () => { $('#login').classList.add('hide');$('#app').classList.remove('hide');brand();home();cartUI();go('home'); };
+  logout = () => { token='';me=null;db.user=null;localStorage.removeItem('aqua_token');location.reload(); };
+  addCart = (pid,silent) => { const p=prod(pid),o=sel[pid]||'S',e=db.cart.find(i=>i.pid==pid&&i.opt==o);if(!p)return;if(e){if(e.qty>=p.stock)return toast('Only '+p.stock+' available');e.qty++}else db.cart.push({pid,opt:o,qty:1});syncCart();cartUI();if(!silent)toast('Added to cart ✔'); };
+  qty = (k,d) => {const i=db.cart[k],p=prod(i.pid);if(!i)return;if(d>0&&i.qty>=p.stock)return toast('Only '+p.stock+' available');i.qty+=d;if(i.qty<=0)db.cart.splice(k,1);syncCart();cartUI();cartView();};
+  placeOrder = async () => {
+    if(placing)return;const L=items(buy||db.cart);if(!L.length)return toast('Cart is empty');
+    let utr='';if(pm!=='COD'){if(!db.qr[pm])return $('#pe').textContent='இந்த payment QR அமைக்கப்படவில்லை.';utr=$('#utr')?.value.trim()||'';if(!/^[A-Za-z0-9]{6,30}$/.test(utr))return $('#pe').textContent='சரியான UTR/reference உள்ளிடவும்.';}
+    placing=true;$('#pbtn').disabled=true;
+    try{
+      const customer={name:draft.name,mobile:draft.mobile,address:draft.addr,city:draft.city,state:draft.state,pin:draft.pin};
+      const result=await req('/orders',{method:'POST',body:JSON.stringify({customer,paymentMethod:pm==='COD'?'COD':'UPI_MANUAL',utr,items:L.map(i=>({product:i.pid,option:i.opt==='P'?'pair':'single',quantity:i.qty}))})});
+      const o=mapOrder(result);db.orders.unshift(o);buy=null;draft=null;db.cart=[];syncCart();await loadStore();placing=false;success(o);
+    }catch(e){placing=false;$('#pbtn').disabled=false;$('#pe').textContent=e.message;}
+  };
+  ordersView = async () => {try{const list=await req(me?.role==='admin'?'/orders/admin/all':'/orders/mine');remoteOrders=list;db.orders=list.map(mapOrder);$('#v-orders').innerHTML='<h2>My orders</h2>'+(db.orders.map(orderCard).join('')||'<div class="g card">No orders yet.</div>')}catch(e){$('#v-orders').innerHTML='<p>'+esc(e.message)+'</p>'}};
+  admLogin = async () => {
+    const email=prompt('Admin email');if(email===null)return;const password=prompt('Admin password');if(password===null)return;
+    try{const d=await req('/auth/login',{method:'POST',body:JSON.stringify({identifier:email,password})});if(d.user.role!=='admin')throw new Error('இந்த account admin அல்ல');token=d.token;me=d.user;localStorage.setItem('aqua_token',token);await loadStore();$('#adm').classList.add('on');adm('dash');}
+    catch(e){toast(e.message)}
+  };
+  setSt = async (orderNumber,status) => {const o=remoteOrders.find(x=>x.orderNumber===orderNumber||id(x)===orderNumber);if(!o)return;const mapped={'New Order':'Placed','Processing':'Packed'};try{await req(`/orders/admin/${id(o)}/status`,{method:'PATCH',body:JSON.stringify({status:mapped[status]||status})});await adm('ords')}catch(e){toast(e.message)}};
+  paid = async (orderNumber) => {const o=remoteOrders.find(x=>x.orderNumber===orderNumber||id(x)===orderNumber);if(!o)return;try{await req(`/orders/admin/${id(o)}/payment`,{method:'PATCH',body:JSON.stringify({paymentStatus:'confirmed'})});await adm('ords')}catch(e){toast(e.message)}};
+  const oldAdm=adm; adm = (tab) => {oldAdm(tab);if(tab==='ords'||tab==='cus'){req('/orders/admin/all').then(list=>{remoteOrders=list;db.orders=list.map(mapOrder);oldAdm(tab)}).catch(e=>toast(e.message));}};
+  const boot = async () => {
+    installLogin();
+    try{
+      if(token){try{const x=await req('/auth/me');me=x.user;db.user={name:me.name,mobile:me.mobile};}catch(e){token='';localStorage.removeItem('aqua_token');}}
+      await loadStore();
+      if(me)enter();
+    }catch(e){toast('Server connection failed: '+e.message+' — MongoDB/server இயங்குகிறதா என பார்க்கவும்.');}
+  };
+  boot();
+})();
+</script>
+
+</body></html>
